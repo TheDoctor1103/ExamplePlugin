@@ -1,0 +1,4 @@
+main: com.herp.derp.Main
+name: ExamplePlugin
+version: 0.1
+author: Potato
