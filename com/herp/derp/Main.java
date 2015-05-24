@@ -18,6 +18,7 @@ public class Main
 	public void onEnable()
 	{
 		logger.info(pdffile.getName() + " v" + pdffile.getVersion() + " has been enabled!");
+		
 		getCommand("heal").setExecutor(new CommandHeal());
 	}
 	

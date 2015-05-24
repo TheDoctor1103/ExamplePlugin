@@ -2,17 +2,15 @@ package com.herp.derp.commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 
 public class CommandHeal 
 	implements CommandExecutor 
 {
-
 	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) 
@@ -24,32 +22,33 @@ public class CommandHeal
 				if (sender.hasPermission("plugin.heal") || sender.isOp())
 				{
 					Player player = (Player) sender;
-					PotionEffect effect = (PotionEffect) player.getActivePotionEffects();
 					
 					player.setHealth(20.0);
+					player.setFoodLevel(20);
 					player.setFireTicks(0);
-					player.removePotionEffect(effect.getType());
+					player.getActivePotionEffects().clear();
 				}
+			} else if (sender instanceof ConsoleCommandSender)
+			{
+				sender.sendMessage(ChatColor.RED + "ERROR: Please enter a player's name!");
 			}
-			sender.sendMessage(ChatColor.RED + "ERROR: Please specify a player's name!");
-		}
-		if (args.length == 1)
+		} else if (args.length == 1)
 		{
-			if (sender instanceof Server)
+			if (sender instanceof ConsoleCommandSender)
 			{
 				Player target = Bukkit.getPlayer(args[0]);
 				
 				if (target != null)
 				{
-					PotionEffect effect = (PotionEffect) target.getActivePotionEffects();
 					
 					target.setHealth(20.0);
+					target.setFoodLevel(20);
 					target.setFireTicks(0);
-					target.removePotionEffect(effect.getType());
-				}
+					target.getActivePotionEffects().clear();
+				} else
 				sender.sendMessage(ChatColor.RED + "ERROR: Target not found!");
 			}
-			if (sender instanceof Player)
+			else if (sender instanceof Player)
 			{
 				if (sender.hasPermission("plugin.heal.others") || sender.isOp())
 				{
@@ -57,12 +56,12 @@ public class CommandHeal
 					
 					if (target != null)
 					{
-						PotionEffect effect = (PotionEffect) target.getActivePotionEffects();
 						
 						target.setHealth(20.0);
+						target.setFoodLevel(20);
 						target.setFireTicks(0);
-						target.removePotionEffect(effect.getType());
-					}
+						target.getActivePotionEffects().clear();
+					} else
 					sender.sendMessage(ChatColor.RED + "ERROR: Target not found!");
 				}
 			}
